@@ -56,10 +56,12 @@ def main():
     parser.add_argument('--single-user', action='store_true',
                         help='Run in single-user mode - bypass session mapping and use any credentials from the credentials directory')
     parser.add_argument('--tools', nargs='*',
-                        choices=['gmail', 'drive', 'calendar', 'docs', 'sheets', 'chat', 'forms', 'slides', 'tasks'],
+                        choices=['calendar', 'gmail'],
                         help='Specify which tools to register. If not provided, all tools are registered.')
     parser.add_argument('--transport', choices=['stdio', 'streamable-http'], default='stdio',
                         help='Transport mode: stdio (default) or streamable-http')
+    parser.add_argument('--scope-mode', choices=['calendar-only', 'calendar-gmail'], default='calendar-only',
+                        help='OAuth scope mode: calendar-only (default) or calendar-gmail (includes read-only Gmail)')
     args = parser.parse_args()
 
     # Set port and base URI once for reuse throughout the function
@@ -84,27 +86,13 @@ def main():
 
     # Import tool modules to register them with the MCP server via decorators
     tool_imports = {
-        'gmail': lambda: __import__('gmail.gmail_tools'),
-        'drive': lambda: __import__('gdrive.drive_tools'),
         'calendar': lambda: __import__('gcalendar.calendar_tools'),
-        'docs': lambda: __import__('gdocs.docs_tools'),
-        'sheets': lambda: __import__('gsheets.sheets_tools'),
-        'chat': lambda: __import__('gchat.chat_tools'),
-        'forms': lambda: __import__('gforms.forms_tools'),
-        'slides': lambda: __import__('gslides.slides_tools'),
-        'tasks': lambda: __import__('gtasks.tasks_tools')
+        'gmail': lambda: __import__('gmail.gmail_tools')
     }
 
     tool_icons = {
-        'gmail': '📧',
-        'drive': '📁',
         'calendar': '📅',
-        'docs': '📄',
-        'sheets': '📊',
-        'chat': '💬',
-        'forms': '📝',
-        'slides': '🖼️',
-        'tasks': '✓'
+        'gmail': '📧'
     }
 
     # Import specified tools or all tools if none specified
@@ -126,6 +114,11 @@ def main():
         os.environ['MCP_SINGLE_USER_MODE'] = '1'
         safe_print("🔐 Single-user mode enabled")
         safe_print("")
+
+    # Set scope mode for OAuth authentication
+    os.environ['MCP_SCOPE_MODE'] = args.scope_mode
+    safe_print(f"🔑 OAuth scope mode: {args.scope_mode}")
+    safe_print("")
 
     # Check credentials directory permissions before starting
     try:

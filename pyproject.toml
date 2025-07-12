@@ -3,9 +3,9 @@ requires = [ "setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "workspace-mcp"
-version = "1.1.5"
-description = "Comprehensive, highly performant Google Workspace Streamable HTTP & SSE MCP Server for Calendar, Gmail, Docs, Sheets, Slides & Drive"
+name = "calendar-mcp-minimal"
+version = "1.0.0"
+description = "Security-focused Google Calendar MCP server with minimal OAuth permissions (Calendar + optional Gmail read-only)"
 readme = "README.md"
 keywords = [ "mcp", "google", "workspace", "llm", "ai", "claude", "model", "context", "protocol", "server"]
 requires-python = ">=3.11"
@@ -54,8 +54,8 @@ Issues = "https://github.com/taylorwilsdon/google_workspace_mcp/issues"
 Changelog = "https://github.com/taylorwilsdon/google_workspace_mcp/releases"
 
 [project.scripts]
-workspace-mcp = "main:main"
+calendar-mcp-minimal = "main:main"
 
 [tool.setuptools]
-packages = [ "auth", "gcalendar", "core", "gdocs", "gdrive", "gmail", "gchat", "gsheets", "gforms", "gslides", "gtasks"]
+packages = [ "auth", "gcalendar", "gmail", "core"]
 py-modules = [ "main"]

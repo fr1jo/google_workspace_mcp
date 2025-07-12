@@ -15,7 +15,7 @@ from google.auth.transport.requests import Request
 from google.auth.exceptions import RefreshError
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from auth.scopes import OAUTH_STATE_TO_SESSION_ID_MAP, SCOPES
+from auth.scopes import OAUTH_STATE_TO_SESSION_ID_MAP, get_scopes
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -378,7 +378,7 @@ async def start_auth_flow(
     )
 
     logger.info(
-        f"[start_auth_flow] Initiating auth for {user_display_name} (session: {mcp_session_id}) with global SCOPES."
+        f"[start_auth_flow] Initiating auth for {user_display_name} (session: {mcp_session_id}) with dynamic scopes."
     )
 
     try:
@@ -398,7 +398,7 @@ async def start_auth_flow(
             )
 
         flow = create_oauth_flow(
-            scopes=SCOPES,  # Use global SCOPES
+            scopes=get_scopes(),  # Use dynamic scopes based on mode
             redirect_uri=redirect_uri,  # Use passed redirect_uri
             state=oauth_state,
         )

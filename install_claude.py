@@ -121,13 +121,26 @@ def get_installation_options() -> Dict[str, any]:
     if prompt_yes_no("\n👤 Enable single-user mode (simplified authentication)?", default=False):
         options["single_user"] = True
 
-    # Tool selection
+    # Scope mode selection
+    print("\n🔑 OAuth Scope Mode")
+    print("1. Calendar-only (minimal permissions)")
+    print("2. Calendar + Gmail read-only (includes email access)")
+    scope_choice = input("Select scope mode [1]: ").strip()
+    if scope_choice == "2":
+        options["scope_mode"] = "calendar-gmail"
+    else:
+        options["scope_mode"] = "calendar-only"
+
+    # Tool selection (limited to calendar and gmail)
     print("\n🛠️  Tool Selection")
-    print("Available tools: gmail, drive, calendar, docs, sheets, forms, chat")
+    print("Available tools: calendar, gmail")
     print("Leave empty to enable all tools")
     tools = input("Enter tools to enable (comma-separated): ").strip()
     if tools:
-        options["tools"] = [t.strip() for t in tools.split(",")]
+        # Filter to only valid tools
+        valid_tools = [t.strip() for t in tools.split(",") if t.strip() in ["calendar", "gmail"]]
+        if valid_tools:
+            options["tools"] = valid_tools
 
     # Transport mode
     if prompt_yes_no("\n🌐 Use HTTP transport mode (for debugging)?", default=False):
@@ -150,6 +163,9 @@ def create_server_config(options: Dict, env_vars: Dict, client_secret_path: Opti
     # Add command line arguments
     if options.get("single_user"):
         config["args"].append("--single-user")
+
+    if options.get("scope_mode"):
+        config["args"].extend(["--scope-mode", options["scope_mode"]])
 
     if options.get("tools"):
         config["args"].extend(["--tools"] + options["tools"])
@@ -220,12 +236,13 @@ def main():
         print("\n📋 Configuration Summary:")
         print(f"  • Installation method: {'Development' if options.get('dev_mode') else 'uvx (PyPI)'}")
         print(f"  • Authentication: {'Environment variables' if env_vars else 'Client secrets file'}")
+        print(f"  • OAuth scope mode: {options.get('scope_mode', 'calendar-only')}")
         if options.get("single_user"):
             print("  • Single-user mode: Enabled")
         if options.get("tools"):
             print(f"  • Tools: {', '.join(options['tools'])}")
         else:
-            print("  • Tools: All enabled")
+            print("  • Tools: All enabled (calendar, gmail)")
         if options.get("http_mode"):
             print("  • Transport: HTTP mode")
         else:

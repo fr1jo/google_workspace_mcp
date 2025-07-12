@@ -1,0 +1,6 @@
+2025-07-12 17:18:17,125 - core.utils - INFO - 71997 - MainThread [utils.check_credentials_directory_permissions:35] - Credentials directory permissions check passed: /Users/brian/.google_workspace_mcp/credentials
+2025-07-12 17:18:17,125 - core.server - INFO - 71997 - MainThread [server.set_transport_mode:81] - Transport mode set to: stdio
+2025-07-12 17:18:17,125 - auth.oauth_callback_server - INFO - 71997 - MainThread [oauth_callback_server.ensure_oauth_callback_available:235] - Creating minimal OAuth server instance for http://localhost:8000
+2025-07-12 17:18:17,125 - auth.oauth_callback_server - INFO - 71997 - MainThread [oauth_callback_server.ensure_oauth_callback_available:239] - Starting minimal OAuth server for stdio mode
+2025-07-12 17:18:17,136 - auth.oauth_callback_server - ERROR - 71997 - MainThread [oauth_callback_server.start:120] - Port 8000 is already in use on localhost. Cannot start minimal OAuth server.
+2025-07-12 17:18:17,137 - auth.oauth_callback_server - ERROR - 71997 - MainThread [oauth_callback_server.ensure_oauth_callback_available:244] - Failed to start minimal OAuth server on http://localhost:8000

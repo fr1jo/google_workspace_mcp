@@ -52,7 +52,7 @@ from auth.scopes import (
     TASKS_SCOPE,
     TASKS_READONLY_SCOPE,
     TASKS_SCOPES,
-    SCOPES
+    get_scopes
 )
 
 # Configure logging
@@ -139,7 +139,7 @@ async def oauth2_callback(request: Request) -> HTMLResponse:
         # Exchange code for credentials. handle_auth_callback will save them.
         # The user_id returned here is the Google-verified email.
         verified_user_id, credentials = handle_auth_callback(
-            scopes=SCOPES, # Ensure all necessary scopes are requested
+            scopes=get_scopes(), # Ensure all necessary scopes are requested
             authorization_response=str(request.url),
             redirect_uri=get_oauth_redirect_uri_for_current_mode(),
             session_id=mcp_session_id # Pass session_id if available

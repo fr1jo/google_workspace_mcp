@@ -113,5 +113,18 @@ TASKS_SCOPES = [
     TASKS_READONLY_SCOPE
 ]
 
-# Combined scopes for all supported Google Workspace operations
-SCOPES = list(set(BASE_SCOPES + CALENDAR_SCOPES + DRIVE_SCOPES + GMAIL_SCOPES + DOCS_SCOPES + CHAT_SCOPES + SHEETS_SCOPES + FORMS_SCOPES + SLIDES_SCOPES + TASKS_SCOPES))
+# Function to get scopes based on mode
+def get_scopes():
+    """Get OAuth scopes based on MCP_SCOPE_MODE environment variable."""
+    import os
+    mode = os.environ.get('MCP_SCOPE_MODE', 'calendar-only')
+    
+    if mode == 'calendar-gmail':
+        # Calendar + read-only Gmail access
+        return list(set(BASE_SCOPES + CALENDAR_SCOPES + [GMAIL_READONLY_SCOPE]))
+    else:
+        # Default: calendar-only
+        return list(set(BASE_SCOPES + CALENDAR_SCOPES))
+
+# Default scopes for calendar-only mode (fallback)
+SCOPES = list(set(BASE_SCOPES + CALENDAR_SCOPES))
