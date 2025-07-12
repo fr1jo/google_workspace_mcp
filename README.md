@@ -25,8 +25,6 @@ This is a **minimal permissions fork** of the original Google Workspace MCP serv
 
 ## 🚀 Installation
 
-### For Friends/Family (Private Git Distribution)
-
 ```bash
 # Install directly from this repository
 uvx git+https://github.com/yourusername/google_workspace_mcp.git
